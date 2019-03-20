@@ -151,9 +151,14 @@ The following plugins support `WaitForFirstConsumer` with pre-created Persistent
 * All of the above
 * [Local](#local)
 
+{{< feature-state state="beta" for_k8s_version="1.14" >}}
+[CSI volumes](/docs/concepts/storage/volumes/#csi) are also supported with dynamic provisioning
+and pre-created PVs, but you'll need to look at the documentation for a specific CSI driver
+to see its supported topology keys and examples. The `CSINodeInfo` feature gate must be enabled.
+
 ### Allowed Topologies
 
-When a cluster operactor specifies the `WaitForFirstConsumer` volume binding mode, it is no longer necessary
+When a cluster operator specifies the `WaitForFirstConsumer` volume binding mode, it is no longer necessary
 to restrict provisioning to specific topologies in most situations. However,
 if still required, `allowedTopologies` can be specified.
 
@@ -627,13 +632,13 @@ parameters:
 
 ```
 
-* `fs`: filesystem to be laid out: [none/xfs/ext4] (default: `ext4`).
+* `fs`: filesystem to be laid out: `none/xfs/ext4` (default: `ext4`).
 * `block_size`: block size in Kbytes (default: `32`).
 * `repl`: number of synchronous replicas to be provided in the form of
-  replication factor [1..3] (default: `1`) A string is expected here i.e.
+  replication factor `1..3` (default: `1`) A string is expected here i.e.
   `"1"` and not `1`.
 * `io_priority`: determines whether the volume will be created from higher
-  performance or a lower priority storage [high/medium/low] (default: `low`).
+  performance or a lower priority storage `high/medium/low` (default: `low`).
 * `snap_interval`: clock/time interval in minutes for when to trigger snapshots.
   Snapshots are incremental based on difference with the prior snapshot, 0
   disables snaps (default: `0`). A string is expected here i.e.
@@ -644,7 +649,7 @@ parameters:
 * `ephemeral`: specifies whether the volume should be cleaned-up after unmount
   or should be persistent. `emptyDir` use case can set this value to true and
   `persistent volumes` use case such as for databases like Cassandra should set
-  to false, [true/false] (default `false`). A string is expected here i.e.
+  to false, `true/false` (default `false`). A string is expected here i.e.
   `"true"` and not `true`.
 
 ### ScaleIO
@@ -739,7 +744,7 @@ references it.
 
 ### Local
 
-{{< feature-state for_k8s_version="v1.10" state="beta" >}}
+{{< feature-state for_k8s_version="v1.14" state="stable" >}}
 
 ```yaml
 kind: StorageClass
@@ -750,7 +755,7 @@ provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 ```
 
-Local volumes do not support dynamic provisioning yet, however a StorageClass
+Local volumes do not currently support dynamic provisioning, however a StorageClass
 should still be created to delay volume binding until pod scheduling. This is
 specified by the `WaitForFirstConsumer` volume binding mode.
 
